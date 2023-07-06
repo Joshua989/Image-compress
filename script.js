@@ -39,9 +39,24 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.toBlob((blob) => {
       const compressedDataUrl = URL.createObjectURL(blob);
 
-      // Update the download link
+      // Get the compressed image size
+      const compressedSize = blob.size;
+      const formattedSize = formatBytes(compressedSize);
+
+      // Update the download link with the compressed size
       downloadLink.href = compressedDataUrl;
       downloadLink.download = 'compressed_image.jpg';
+      downloadLink.textContent = `Download Compressed Image (${formattedSize})`;
     }, 'image/jpeg', quality);
   });
+
+  function formatBytes(bytes) {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
 });
